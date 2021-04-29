@@ -312,4 +312,17 @@ public class ParkingLotSystemUnitTest {
         Assert.assertEquals(expectedList, vehicleByColor);
     }
 
+    @Test
+    public void givenParkingLotSystem_WhenParkedSmallVehicleAndDriverIsHandicap_ShouldReturnDetailsOfVehicle() {
+        List<List<String>> expectedList = new ArrayList<>();
+        List<String> lot = new ArrayList();
+        lot.add("1 Vehicle{color='WHITE', model='TOYOTA', numberPlate='MH-12-1234', attender='Shamal'}");
+        expectedList.add(lot);
+        parkingLot.setCapacity(3);
+
+        when(parkingLot.findBySizeDriverAndSlot(VehicleSize.SMALL, DriverType.HANDICAP, 1)).thenReturn(lot);
+        List<List<String>> vehicleList = parkingLotSystem.findVehicleBySizeDriverAndSlot(VehicleSize.SMALL, DriverType.HANDICAP, 1);
+        Assert.assertEquals(expectedList, vehicleList);
+    }
+
 }
