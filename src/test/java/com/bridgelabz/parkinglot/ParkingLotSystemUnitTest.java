@@ -67,5 +67,13 @@ public class ParkingLotSystemUnitTest {
         }
     }
 
-
+    @Test
+    public void givenVehicle_WhenParkingFull_ShouldThrowException() {
+        try {
+            when((parkingLot).isParkingFull()).thenReturn(true);
+            parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        } catch (ParkingLotSystemException e) {
+            Assert.assertEquals("Parking Is Full", e.getMessage());
+        }
+    }
 }
