@@ -166,4 +166,18 @@ public class ParkingLotSystemUnitTest {
         Assert.assertTrue(parkingFull);
     }
 
+    //ParkingOwner Class Mocked To Return False
+    @Test
+    public void givenVehicle_WhenSpaceIsAvailable_ShouldInformOwner() {
+        ParkingOwner parkingOwner = mock(ParkingOwner.class);
+        parkingLotSystem.subscribe(parkingOwner);
+        try {
+            parkingLot.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.LARGE);
+            parkingLot.parkVehicle(new Vehicle("WHITE", "TOYOTA", "MH-12-1234", "Shamal"), DriverType.NORMAL, VehicleSize.SMALL);
+        } catch (ParkingLotSystemException e) {
+            when(parkingOwner.isParkingFull()).thenReturn(false);
+            boolean parkingAvailable = parkingOwner.isParkingFull();
+            Assert.assertFalse(parkingAvailable);
+        }
+    }
 }
