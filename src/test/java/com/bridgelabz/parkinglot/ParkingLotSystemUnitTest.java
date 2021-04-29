@@ -3,6 +3,7 @@ package com.bridgelabz.parkinglot;
 import com.bridgelabz.Exception.ParkingLotSystemException;
 import com.bridgelabz.enums.DriverType;
 import com.bridgelabz.enums.VehicleSize;
+import com.bridgelabz.model.AirportSecurity;
 import com.bridgelabz.model.ParkingOwner;
 import com.bridgelabz.model.Vehicle;
 import org.junit.Assert;
@@ -153,4 +154,16 @@ public class ParkingLotSystemUnitTest {
             Assert.assertEquals("Vehicle Already Parked", e.getMessage());
         }
     }
+
+    //AirportSecurity Class Mocked To Return True
+    @Test
+    public void givenVehicle_WhenParkingLotFull_ShouldInformToAirportSecurity() {
+        AirportSecurity airportSecurity = mock(AirportSecurity.class);
+        parkingLotSystem.subscribe(airportSecurity);
+        parkingLot.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.LARGE);
+        when(airportSecurity.isParkingFull()).thenReturn(true);
+        boolean parkingFull = airportSecurity.isParkingFull();
+        Assert.assertTrue(parkingFull);
+    }
+
 }
