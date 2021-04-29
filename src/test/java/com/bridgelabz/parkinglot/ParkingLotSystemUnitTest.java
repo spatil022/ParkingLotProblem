@@ -84,4 +84,16 @@ public class ParkingLotSystemUnitTest {
         boolean isUnparkVehicle = parkingLotSystem.unparkVehicle(vehicle);
         Assert.assertTrue(isUnparkVehicle);
     }
+
+    @Test
+    public void givenVehicleParkedAndAnotherVehicle_WhenUnparkVehicle_ShouldReturnException() {
+        Vehicle vehicle1 = new Vehicle("WHITE", "TOYOTA", "MH-12-1234", "Shamal");
+        try {
+            parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+            when((parkingLot).isVehicleParked(vehicle)).thenReturn(false);
+            parkingLotSystem.unparkVehicle(vehicle1);
+        } catch (ParkingLotSystemException e) {
+            Assert.assertEquals("Vehicle Is Not Available", e.getMessage());
+        }
+    }
 }
