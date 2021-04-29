@@ -180,4 +180,17 @@ public class ParkingLotSystemUnitTest {
             Assert.assertFalse(parkingAvailable);
         }
     }
+
+    //AirportSecurity Class Mocked To Return True
+    @Test
+    public void givenVehicle_WhenSpaceIsAvailable_ShouldInformToAirportSecurity() {
+        AirportSecurity airportSecurity = mock(AirportSecurity.class);
+        parkingLotSystem.subscribe(airportSecurity);
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        when(airportSecurity.isParkingFull()).thenReturn(false);
+        boolean parkingAvailable = airportSecurity.isParkingFull();
+        Assert.assertFalse(parkingAvailable);
+
+    }
+
 }
