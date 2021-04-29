@@ -225,4 +225,29 @@ public class ParkingLotSystemUnitTest {
         }
     }
 
+    @Test
+    public void givenParkingLot_WhenVehicleParkedAndOwnerIsObserver_ShouldInformParkingTimeToOwner() {
+        ParkingOwner parkingOwner = mock(ParkingOwner.class);
+        parkingLotSystem.subscribe(parkingOwner);
+        when((parkingLot).isVehicleParked(vehicle)).thenReturn(true);
+        when(parkingLot.getVehicleParkingTime(vehicle)).thenReturn(0);
+        parkingLotSystem.getVehicleParkingTime(vehicle);
+        when(parkingOwner.getParkingTime()).thenReturn(0);
+        int parkingTime = parkingOwner.getParkingTime();
+        Assert.assertEquals(0, parkingTime);
+    }
+
+    @Test
+    public void givenParkingLot_WhenVehicleNotParkedAndOwnerIsObserver_ShouldReturnException() {
+        ParkingOwner parkingOwner = mock(ParkingOwner.class);
+        parkingLotSystem.subscribe(parkingOwner);
+        try {
+            when((parkingLot).isVehicleParked(vehicle)).thenReturn(false);
+            parkingLotSystem.getVehicleParkingTime(vehicle);
+        } catch (ParkingLotSystemException e) {
+            Assert.assertEquals("Vehicle Is Not Available", e.getMessage());
+        }
+    }
+
+
 }
