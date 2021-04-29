@@ -208,4 +208,21 @@ public class ParkingLotSystemUnitTest {
         Assert.assertFalse(parkingAvailable1 && parkingAvailable2);
     }
 
+    @Test
+    public void givenParkingLotSystem_WhenVehicleFound_ShouldReturnVehicleSlot() {
+        when((parkingLot).isVehicleParked(vehicle)).thenReturn(true);
+        when((parkingLot).findVehicle(vehicle)).thenReturn(0);
+        int slotNumber = parkingLotSystem.findVehicle(vehicle);
+        Assert.assertEquals(0, slotNumber);
+    }
+
+    @Test
+    public void givenParkingLotSystem_WhenVehicleNotFound_ShouldReturnException() {
+        try {
+            parkingLotSystem.findVehicle(vehicle);
+        } catch (ParkingLotSystemException e) {
+            Assert.assertEquals("Vehicle Is Not Available", e.getMessage());
+        }
+    }
+
 }
