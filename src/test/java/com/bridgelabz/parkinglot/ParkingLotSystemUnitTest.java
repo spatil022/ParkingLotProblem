@@ -10,6 +10,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -247,6 +250,23 @@ public class ParkingLotSystemUnitTest {
         } catch (ParkingLotSystemException e) {
             Assert.assertEquals("Vehicle Is Not Available", e.getMessage());
         }
+    }
+
+    @Test
+    public void givenWhiteCarToPark_whenParkingLotToParkVehicle_shouldReturnLocationOfAllWhiteCars() {
+        List<List<Integer>> expectedList = new ArrayList<>();
+        List<Integer> lot1 = new ArrayList<>();
+        lot1.add(0);
+        expectedList.add(lot1);
+        parkingLot.setCapacity(2);
+        Vehicle vehicle1 = new Vehicle("BLUE", "TOYOTA", "MH-12-1234", "Shamal");
+        when(parkingLot.isVehicleParked(vehicle)).thenReturn(true);
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        when(parkingLot.isVehicleParked(vehicle1)).thenReturn(true);
+        parkingLotSystem.parkVehicle(vehicle1, DriverType.NORMAL, VehicleSize.SMALL);
+        when(parkingLot.findByColor("WHITE")).thenReturn(lot1);
+        List<List<Integer>> vehicleByColor = parkingLotSystem.findVehicleByColor("WHITE");
+        Assert.assertEquals(expectedList, vehicleByColor);
     }
 
 
