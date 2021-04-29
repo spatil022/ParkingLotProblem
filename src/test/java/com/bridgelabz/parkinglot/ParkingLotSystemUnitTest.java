@@ -3,6 +3,7 @@ package com.bridgelabz.parkinglot;
 import com.bridgelabz.Exception.ParkingLotSystemException;
 import com.bridgelabz.enums.DriverType;
 import com.bridgelabz.enums.VehicleSize;
+import com.bridgelabz.model.ParkingOwner;
 import com.bridgelabz.model.Vehicle;
 import org.junit.Assert;
 import org.junit.Before;
@@ -94,6 +95,62 @@ public class ParkingLotSystemUnitTest {
             parkingLotSystem.unparkVehicle(vehicle1);
         } catch (ParkingLotSystemException e) {
             Assert.assertEquals("Vehicle Is Not Available", e.getMessage());
+        }
+    }
+
+    //ParkingOwner Class Mocked To Return True
+    @Test
+    public void givenVehicle_WhenParkingFull_ShouldInformOwner() {
+        ParkingOwner parkingOwner = mock(ParkingOwner.class);
+        parkingLotSystem.subscribe(parkingOwner);
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        when((parkingOwner).isParkingFull()).thenReturn(true);
+        Assert.assertTrue(parkingOwner.isParkingFull());
+    }
+
+    @Test
+    public void givenVehicle_WhenParkingFullAndOwnerIsObserver_ShouldInformOwner() {
+        ParkingOwner parkingOwner = mock(ParkingOwner.class);
+        try {
+            parkingLotSystem.subscribe(parkingOwner);
+            parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+            when((parkingLot).isParkingFull()).thenReturn(true);
+        } catch (ParkingLotSystemException e) {
+            Assert.assertEquals("Parking Is Full", e.getMessage());
+        }
+    }
+
+    @Test
+    public void givenVehicle_WhenParkingFull_ShouldNotInformOwner() {
+        ParkingOwner parkingOwner = mock(ParkingOwner.class);
+        parkingLotSystem.subscribe(parkingOwner);
+        parkingLotSystem.unsubscribe(parkingOwner);
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        when((parkingOwner).isParkingFull()).thenReturn(true);
+        Assert.assertTrue(parkingOwner.isParkingFull());
+    }
+
+    @Test
+    public void givenCapacityIs2_ShouldBeAbleToPark2Vehicle() {
+        Vehicle vehicle1 = new Vehicle("WHITE", "TOYOTA", "MH-12-1234", "Shamal");
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        when((parkingLot).isVehicleParked(vehicle)).thenReturn(true);
+        boolean isParked1 = parkingLot.isVehicleParked(vehicle);
+        parkingLotSystem.parkVehicle(vehicle1, DriverType.NORMAL, VehicleSize.SMALL);
+        when((parkingLot).isVehicleParked(vehicle1)).thenReturn(true);
+        boolean isParked2 = parkingLot.isVehicleParked(vehicle1);
+        Assert.assertTrue(isParked1 && isParked2);
+    }
+
+    @Test
+    public void givenSameVehiclesTwoTimes_WhenParked_ShouldThrowException() {
+        parkingLot.setCapacity(2);
+        try {
+            parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+            when((parkingLot).isVehicleParked(vehicle)).thenThrow(new ParkingLotSystemException("Vehicle Already Parked", ParkingLotSystemException.ExceptionType.VEHICLE_ALREADY_PARKED));
+            parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        } catch (ParkingLotSystemException e) {
+            Assert.assertEquals("Vehicle Already Parked", e.getMessage());
         }
     }
 }
