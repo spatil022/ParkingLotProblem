@@ -325,4 +325,16 @@ public class ParkingLotSystemUnitTest {
         Assert.assertEquals(expectedList, vehicleList);
     }
 
+    @Test
+    public void givenParkingLotSystem_WhenParkedVehicle_ShouldReturnDetailsOfVehicle() {
+        List<List<String>> expectedList = new ArrayList<>();
+        List<String> lot = new ArrayList();
+        lot.add("0 Vehicle{color='WHITE', model='TOYOTA', numberPlate='MH-12-1234', attender='Shamal'}");
+        expectedList.add(lot);
+        parkingLot.setCapacity(3);
+
+        when(parkingLot.findAllVehicle()).thenReturn(lot);
+        List<List<String>> vehicleList = parkingLotSystem.findAllVehicle();
+        Assert.assertEquals(expectedList, vehicleList);
+    }
 }
