@@ -76,4 +76,12 @@ public class ParkingLotSystemUnitTest {
             Assert.assertEquals("Parking Is Full", e.getMessage());
         }
     }
+
+    @Test
+    public void givenVehicle_WhenUnparkVehicle_ShouldReturnTrue() {
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        when((parkingLot).isVehicleParked(vehicle)).thenReturn(true);
+        boolean isUnparkVehicle = parkingLotSystem.unparkVehicle(vehicle);
+        Assert.assertTrue(isUnparkVehicle);
+    }
 }
