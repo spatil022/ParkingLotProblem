@@ -193,4 +193,19 @@ public class ParkingLotSystemUnitTest {
 
     }
 
+    //ParkingOwner And AirportSecurity Class Mocked To Return True
+    @Test
+    public void givenVehicle_WhenSpaceIsAvailable_ShouldInformToParkingLotOwnerAndAirportSecurity() {
+        ParkingOwner parkingOwner = mock(ParkingOwner.class);
+        AirportSecurity airportSecurity = mock(AirportSecurity.class);
+        parkingLotSystem.subscribe(parkingOwner);
+        parkingLotSystem.subscribe(airportSecurity);
+        parkingLot.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        when(parkingOwner.isParkingFull()).thenReturn(false);
+        when(airportSecurity.isParkingFull()).thenReturn(false);
+        boolean parkingAvailable1 = parkingOwner.isParkingFull();
+        boolean parkingAvailable2 = airportSecurity.isParkingFull();
+        Assert.assertFalse(parkingAvailable1 && parkingAvailable2);
+    }
+
 }
