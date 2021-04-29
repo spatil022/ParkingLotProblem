@@ -270,21 +270,6 @@ public class ParkingLotSystemUnitTest {
     }
 
     @Test
-    public void givenCarToPark_WhenParkingLotToParkVehicle_ShouldReturnLocationOfAllCarsWithin30Minutes() {
-        List<List<String>> expectedList = new ArrayList<>();
-        List<String> lot1 = new ArrayList<>();
-        lot1.add("1 Vehicle{color='WHITE', model='BMW', numberPlate='MH-12-1234', attender='Shamal'}");
-        expectedList.add(lot1);
-
-        parkingLot.setCapacity(2);
-        Vehicle vehicle = new Vehicle("WHITE", "BMW", "MH-12-1234", "Shamal");
-        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
-        when(parkingLot.findByTime(30)).thenReturn(lot1);
-        List<List<String>> vehicleByColor = parkingLotSystem.findVehicleByTime(30);
-        Assert.assertEquals(expectedList, vehicleByColor);
-    }
-
-    @Test
     public void givenParkingLotSystem_WhenParkedBlueToyotaCar_ShouldReturnLocationAndAttendantNameAndPlateNumber() {
         List<List<String>> expectedList = new ArrayList<>();
         List<String> carList = new ArrayList();
@@ -311,4 +296,20 @@ public class ParkingLotSystemUnitTest {
         List<List<String>> vehicleByColor = parkingLotSystem.findVehicleByModel("BMW");
         Assert.assertEquals(expectedList, vehicleByColor);
     }
+
+    @Test
+    public void givenCarToPark_WhenParkingLotToParkVehicle_ShouldReturnLocationOfAllCarsWithin30Minutes() {
+        List<List<String>> expectedList = new ArrayList<>();
+        List<String> lot1 = new ArrayList<>();
+        lot1.add("1 Vehicle{color='WHITE', model='BMW', numberPlate='MH-12-1234', attender='Shamal'}");
+        expectedList.add(lot1);
+
+        parkingLot.setCapacity(2);
+        Vehicle vehicle = new Vehicle("WHITE", "BMW", "MH-12-1234", "Shamal");
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        when(parkingLot.findByTime(30)).thenReturn(lot1);
+        List<List<String>> vehicleByColor = parkingLotSystem.findVehicleByTime(30);
+        Assert.assertEquals(expectedList, vehicleByColor);
+    }
+
 }
